@@ -10,6 +10,9 @@
         <path d="M418 -2 L767 -2 L767 541 L418 541 L418 -2 Z"/>
       </clipPath>
     </defs>
+    <g fill="white" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" transform="translate(-418,2)" stroke="white">
+      <rect x="418" width="349" height="543" y="-2" clip-path="url(#clipPath2)" stroke="none"/>
+    </g>
     <g fill="rgb(204,255,255)" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" transform="matrix(1,0,0,1,-418,2)" stroke="rgb(204,255,255)">
       <rect x="434.2117" y="359" clip-path="url(#clipPath2)" width="317.2883" rx="4" ry="4" height="166.7958" stroke="none"/>
     </g>
@@ -132,12 +135,12 @@
       <path fill="none" d="M592.1686 211.983 L594.0831 154.8039" clip-path="url(#clipPath2)"/>
       <path d="M591.9009 219.9785 L597.2997 208.1525 L592.2021 210.9835 L587.3053 207.8179 Z" clip-path="url(#clipPath2)" stroke="none"/>
       <path d="M594.3508 146.8084 L588.9521 158.6344 L594.0497 155.8034 L598.9465 158.969 Z" clip-path="url(#clipPath2)" stroke="none"/>
-      <text x="575.3955" font-size="10px" y="187.1992" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none" xml:space="preserve">scala.js</text>
+      <text x="581.0474" font-size="10px" y="181.3105" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none" xml:space="preserve">scala</text>
+      <text x="578.5718" font-size="10px" y="193.0879" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none" xml:space="preserve">native</text>
       <path fill="none" d="M613.8857 214.0044 L668.3913 152.8051" clip-path="url(#clipPath2)"/>
       <path d="M608.565 219.9785 L620.2798 214.3427 L614.5508 213.2576 L612.8122 207.6919 Z" clip-path="url(#clipPath2)" stroke="none"/>
       <path d="M673.712 146.831 L661.9971 152.4668 L667.7262 153.5519 L669.4648 159.1176 Z" clip-path="url(#clipPath2)" stroke="none"/>
-      <text x="657.0533" font-size="10px" y="181.3105" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none" xml:space="preserve">scala </text>
-      <text x="656.1598" font-size="10px" y="193.0879" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none" xml:space="preserve">native</text>
+      <text x="652.179" font-size="10px" y="188.1025" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none" xml:space="preserve">scala.js</text>
       <path fill="none" d="M591.25 370.5536 L591.25 358.6626" clip-path="url(#clipPath2)"/>
       <path d="M591.25 350.6626 L586.25 362.6626 L591.25 359.6626 L596.25 362.6626 Z" clip-path="url(#clipPath2)" stroke="none"/>
       <path fill="none" d="M510.6878 455.5491 L567.3762 409.4248" clip-path="url(#clipPath2)"/>

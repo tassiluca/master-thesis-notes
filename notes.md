@@ -5,8 +5,10 @@ It will be updated as the project evolves.
 
 ## Goals
 
-**Problem Statement**: Scafi is a programming model for aggregate computing that enables writing distributed programs in a high-level, declarative manner, based on _field calculus_. The Scafi library is implemented in Scala and designed for the JVM platform.
-Alternative implementations have been developed in different languages, including C++, Kotlin, and Rust to address performance needs or support different platforms, such as mobile devices. However, these implementations have been created independently from scratch, with no code reuse, and no compatibility in mind.
+**Problem Statement**: Scafi is a programming model for aggregate computing that enables writing distributed programs in a high-level, declarative manner, based on _field calculus_. 
+The Scafi library is implemented in Scala and designed for the JVM platform.
+Alternative implementations have been developed in different languages, including C++, Kotlin, and Rust to address performance needs or support different platforms, such as mobile or edge devices. 
+However, these implementations have been created independently from scratch, with no code reuse, and no compatibility in mind.
 
 The **goal** of the thesis is to re-engineer scafi architecture to achieve multi-platform and multi-language independence.
 
@@ -58,6 +60,8 @@ Highlights:
 
 - the abstraction layer leverages scala multi-platform compiler capabilities, targeting JVM, Javascript and Native platforms.
   - the _product-to-platform_ interface is a contract defining the platform-specific functionalities, which are appropriately implemented in each supported backend according to the target platform.
+  - an adapter of the exposed API will be implemented to be accessible from all the platforms.
+    - for example, in native platform, leveraging scala native, an adapter will be implemented to make the API accessible from native languages through C ABI.
 - the transpilation infrastructure allow to generate a consistent user-side facade over the scafi API, tailored to the specific target language of choice (similarly to the approach described in [^1]).
   - important: the _user-to-product_ interface contains only the bindings to access the software product, implemented using a _foreign function interface_ (FFI) library for the specific targeted language.
     - for example, when targeting the native platform, the transpilation infrastructure must be able to generate bindings via the C ABI using ad-hoc FFI libraries (e.g. [`swig`](https://www.swig.org/)).
@@ -80,3 +84,27 @@ The initial work plan is to start with a proof of concept to validate the archit
 5. creation of a JS interoperable layer
 
 [^1]: [When the dragons defeat the knight: Basilisk an architectural pattern for platform and language independent development](https://www.sciencedirect.com/science/article/pii/S016412122400133X?via%3Dihub)
+
+## Proof of concept
+
+The selected proof of concept for testing the feasibility of the architecture is the case of Distributed Asynchronous Petri Nets.
+
+The code is available [here](https://github.com/tassiluca/dap).
+
+### 1 + 2) Multi-platform and native interoperable layer
+
+Key points:
+
+- for targeting native platform, Scala Native [^2] have been used
+  - it provides scala bindings for C programming constructs, standard library and a core subset of POSIX libraries, making it interoperable with C code
+- the data structures and methods that are part of the public API have been re-written using C programming constructs (e.g. `struct` and prototypes) so that from C it is possible to properly interact with them
+  - scala shared data structures are converted in their C counterparts back and forth using appropriate conversion methods
+  - the C prototypes are implemented in scala native and linked to the C code during the compilation phase (through `@exported` methods in scala native)
+  - _transpilation infrastructure_ will be in charge of generating this
+- one important aspect is how to make the C API generic:
+  - for generic types opaque pointers are used.
+  - the scala code only knows the generic type is a pointer to an opaque structure, hence it can only pass it around without knowing its internals, while the C code knows the actual implementation of the structure and can properly interact with it
+  - _side effect_: all the operations that need to work on the internals of the generic types must be implemented in C and make them available to the scala code (see `@extern` in scala native)
+    - this is necessary, for example, to implement the distribution layer for (un)marshalling the data structures
+
+[^2]: https://scala-native.org/en/stable/
