@@ -95,9 +95,12 @@ The code is available [here](https://github.com/tassiluca/dap).
 
 Key points:
 
-- for targeting native platform, Scala Native [^2] have been used
+- for targeting native platform, [Scala Native](https://scala-native.org/en/stable/) have been used
   - it provides scala bindings for C programming constructs, standard library and a core subset of POSIX libraries, making it interoperable with C code
-- the data structures and methods that are part of the public API have been re-written using C programming constructs (e.g. `struct` and prototypes) so that from C it is possible to properly interact with them
+  - leveraging sbt [cross-project plugin](https://github.com/portable-scala/sbt-crossproject) it is possible to compile for native platform and generate shared / static libraries
+  - ! scala native do not generate header files for the C code (differently from Kotlin Native)
+
+- the data structures and methods that are part of the public API have been re-written using C programming constructs (e.g. `struct` and prototypes) so that from C it is possible to properly interact with them $\Rightarrow$ this incarnates the _native interoperability protocol_ [^2]
   - scala shared data structures are converted in their C counterparts back and forth using appropriate conversion methods
   - the C prototypes are implemented in scala native and linked to the C code during the compilation phase (through `@exported` methods in scala native)
   - _transpilation infrastructure_ will be in charge of generating this
@@ -107,4 +110,22 @@ Key points:
   - _side effect_: all the operations that need to work on the internals of the generic types must be implemented in C and make them available to the scala code (see `@extern` in scala native)
     - this is necessary, for example, to implement the distribution layer for (un)marshalling the data structures
 
-[^2]: https://scala-native.org/en/stable/
+- Python examples uses [`cffi`](https://cffi.readthedocs.io/en) to interact with the C API
+  - `cffi` support [pyhton code embedding](https://cffi.readthedocs.io/en/stable/embedding.html)
+  - `swig` support different languages
+
+Open questions:
+
+1. `cffi` and other FFI libraries require the opaque data types to be defined in the header file (see the [tasks](https://github.com/tassiluca/dap/blob/0b278c4359735f7076d8f9058318b60decdb629a/dap-native-examples/tasks.py#L55) used to build the C API for Python). The transpilation infrastructure should be able to generate the header files enriched with the C concrete types
+
+2. The examples implemented so far uses opaque pointers. The behavior is programmed using simple rewrite rules where the state is generic in `T` and all the rules are defined in terms of `T`. This is a limitation that must be addressed now?
+   1. maybe it is necessary to replace opaque pointers with `void*` (and use a type tag to distinguish the actual type of the pointer)
+
+3. For the moment the Python wrapper code have been written manually. Moving towards point 3. of the work plan, is it possible to automate this in the transpilation infrastructure?
+    - things to be taken in consideration:
+      1. it is very hard to debug
+      2. beware garbage collection free memory
+      3. the generated code can be idioamtic?
+      4. how to document the generated code?
+
+[^2]: https://faultlore.com/blah/c-isnt-a-language/
