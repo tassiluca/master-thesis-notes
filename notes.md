@@ -99,6 +99,7 @@ Key points:
   - it provides scala bindings for C programming constructs, standard library and a core subset of POSIX libraries, making it interoperable with C code
   - leveraging sbt [cross-project plugin](https://github.com/portable-scala/sbt-crossproject) it is possible to compile for native platform and generate shared / static libraries
   - ! scala native do not generate header files for the C code (differently from Kotlin Native)
+  - A library that can help generating bindings for C libraries is [Scala Native Bindgen](https://sn-bindgen.indoorvivants.com) even if in our case we don't have an external C library to bind to but we want to expose a C API for our scala code
 
 - the data structures and methods that are part of the public API have been re-written using C programming constructs (e.g. `struct` and prototypes) so that from C it is possible to properly interact with them $\Rightarrow$ this incarnates the _native interoperability protocol_ [^2]
   - scala shared data structures are converted in their C counterparts back and forth using appropriate conversion methods
@@ -127,5 +128,7 @@ Open questions:
       2. beware garbage collection free memory
       3. the generated code can be idioamtic?
       4. how to document the generated code?
+
+![Architecture flow](./diagrams/architecture-flow.svg)
 
 [^2]: https://faultlore.com/blah/c-isnt-a-language/
